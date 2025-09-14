@@ -38,5 +38,5 @@ def login_view(request):
         return Response({"error": "Login failed"}, status=status.HTTP_401_UNAUTHORIZED)
 
     if not response.success:
-        return Response({"error": response.error}, status=status.HTTP_400_BAD_REQUEST)
-    return Response(response.data, status=status.HTTP_200_OK)
+        return Response({"message": response.message}, status=response.status_code)
+    return Response(response.data, status=response.status_code)

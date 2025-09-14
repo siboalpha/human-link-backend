@@ -21,9 +21,22 @@ class ProfileQueryService:
         """
         try:
             profile = UserProfile.objects.get(user__id=user_id)
-        except UserProfile.DoesNotExist:
+            profile_data = {
+                "id": profile.id,
+                "user_id": profile.user.id,
+                "bio": profile.bio,
+                "location": profile.location,
+                "birth_date": profile.birth_date,
+                "phone_number": profile.phone_number,
+                "avatar": profile.avatar,
+                "created_at": profile.created_at,
+                "updated_at": profile.updated_at,
+            }
             return ServiceResponse(
-                success=False, message="User not found", status_code=404
+                success=True,
+                message="User profile retrieved successfully",
+                data=profile_data,
+                status_code=200,
             )
         except UserProfile.DoesNotExist:
             return ServiceResponse(

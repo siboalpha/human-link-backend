@@ -2,10 +2,6 @@
 from core.data_classes import ServiceResponse
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.models import User
-from users.services.query import ProfileQueryService
-
-profile_service = ProfileQueryService()
 
 
 class AuthenticationService:
@@ -40,28 +36,27 @@ class AuthenticationService:
 
         # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
-        tokens = {
+
+        # Add custom claims to the token
+        refresh["email"] = user.email
+        refresh["user_id"] = user.id
+        refresh["role"] = getattr(user, "role", "user")
+
+        # Get profile ID if user has a profile
+        if hasattr(user, "userprofile"):
+            refresh["profile_id"] = user.userprofile.id
+
+        # Prepare response data with only tokens
+        response_data = {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
 
-        # Add additional claims to the token
-        tokens["email"] = user.email
-        tokens["user_id"] = user.id
-
-        # get users group as a role
-        roles = user.groups.values_list("name", flat=True)
-        tokens["roles"] = roles
-
-        # get user profile id
-        profile_response = profile_service.getUserProfile(user.id)
-        if profile_response.success and profile_response.data:
-            tokens["profile_id"] = profile_response.data["id"]
-        else:
-            tokens["profile_id"] = None
-
         return ServiceResponse(
-            success=True, message="Login successful", data=tokens, status_code=200
+            success=True,
+            message="Login successful",
+            data=response_data,
+            status_code=200,
         )
 
     def loginWithGoogle(self, google_token) -> ServiceResponse:
