@@ -1,4 +1,4 @@
-from core.data_classes import ServiceResponse
+from core.utils.data_classes import ServiceResponse
 from users.models import UserProfile
 
 

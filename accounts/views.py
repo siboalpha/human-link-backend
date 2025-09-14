@@ -16,28 +16,25 @@ def login_view(request):
     data = request.data
     method = data.get("method")
     response = None
-    if method == "password":
-        username = data.get("username")
-        password = data.get("password")
-        response = auth_service.loginWithPassword(username, password)
 
-    elif method == "google":
-        google_token = data.get("google_token")
-        response = auth_service.loginWithGoogle(google_token)
-
-    elif method == "facebook":
-        facebook_token = data.get("facebook_token")
-        response = auth_service.loginWithFacebook(facebook_token)
-
-    else:
+    # Check for valid login methods
+    if method not in ["password", "email", "google", "facebook"]:
         return Response(
-            {"error": "Invalid login method"}, status=status.HTTP_400_BAD_REQUEST
+            {"message": "Invalid login method"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    elif method == "password":
+        # Handle both username and email parameters for password login
+        username = data.get("username") or data.get("email")
+        password = data.get("password")
+
+        response = auth_service.signin(
+            method=method,
+            username=username,
+            password=password,
         )
 
-    if not response:
-        return Response({"error": "Login failed"}, status=status.HTTP_401_UNAUTHORIZED)
-
-    if not response.success:
+    if not response or not response.success:
         return Response({"message": response.message}, status=response.status_code)
     return Response(response.data, status=response.status_code)
 

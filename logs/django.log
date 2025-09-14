@@ -1,0 +1,123 @@
+ERROR 2025-09-14 09:09:59,207 log 64455 8569921728 Internal Server Error: /api/v1/accounts/login/
+Traceback (most recent call last):
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/accounts/views.py", line 22, in login_view
+    response = auth_service.loginWithPassword(username, password)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AuthenticationService' object has no attribute 'loginWithPassword'. Did you mean: 'signinWithPassword'?
+ERROR 2025-09-14 09:10:00,392 log 64455 8569921728 Internal Server Error: /api/v1/accounts/login/
+Traceback (most recent call last):
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/accounts/views.py", line 22, in login_view
+    response = auth_service.loginWithPassword(username, password)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AuthenticationService' object has no attribute 'loginWithPassword'. Did you mean: 'signinWithPassword'?
+ERROR 2025-09-14 09:10:01,475 log 64455 8569921728 Internal Server Error: /api/v1/accounts/login/
+Traceback (most recent call last):
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/venv/lib/python3.13/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/accounts/views.py", line 22, in login_view
+    response = auth_service.loginWithPassword(username, password)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AuthenticationService' object has no attribute 'loginWithPassword'. Did you mean: 'signinWithPassword'?
+WARNING 2025-09-14 09:10:02,558 log 64455 8569921728 Bad Request: /api/v1/accounts/sign-up/
+WARNING 2025-09-14 09:10:03,632 log 64455 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:10:04,889 logging 64455 8569921728 User created successfully: signup@email.com
+WARNING 2025-09-14 09:10:05,982 log 64455 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:10:14,327 logging 64455 8569921728 User created successfully: signup1@email.com
+WARNING 2025-09-14 09:13:26,698 log 68082 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:13:27,774 log 68082 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:13:28,855 log 68082 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:13:29,928 log 68082 8569921728 Bad Request: /api/v1/accounts/sign-up/
+WARNING 2025-09-14 09:13:31,009 log 68082 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:13:32,340 logging 68082 8569921728 User created successfully: signup@email.com
+WARNING 2025-09-14 09:13:33,426 log 68082 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:13:41,754 logging 68082 8569921728 User created successfully: signup1@email.com
+WARNING 2025-09-14 09:14:21,474 log 69149 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:14:22,645 log 69149 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:14:23,729 log 69149 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:14:24,824 log 69149 8569921728 Bad Request: /api/v1/accounts/sign-up/
+WARNING 2025-09-14 09:14:25,912 log 69149 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:14:27,179 logging 69149 8569921728 User created successfully: signup@email.com
+WARNING 2025-09-14 09:14:28,276 log 69149 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:14:36,744 logging 69149 8569921728 User created successfully: signup1@email.com
+WARNING 2025-09-14 09:15:09,281 log 70882 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:15:10,376 log 70882 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:15:11,470 log 70882 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:15:12,550 log 70882 8569921728 Bad Request: /api/v1/accounts/sign-up/
+WARNING 2025-09-14 09:15:13,641 log 70882 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:15:14,902 logging 70882 8569921728 User created successfully: signup@email.com
+WARNING 2025-09-14 09:15:15,996 log 70882 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:15:24,352 logging 70882 8569921728 User created successfully: signup1@email.com
+WARNING 2025-09-14 09:15:52,362 log 72130 8569921728 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 09:16:42,896 log 73280 8569921728 Unauthorized: /api/v1/accounts/login/
+WARNING 2025-09-14 09:16:53,896 log 73741 8569921728 Unauthorized: /api/v1/accounts/login/
+WARNING 2025-09-14 09:16:56,430 log 73741 8569921728 Unauthorized: /api/v1/accounts/login/
+WARNING 2025-09-14 09:16:57,520 log 73741 8569921728 Bad Request: /api/v1/accounts/sign-up/
+WARNING 2025-09-14 09:16:58,623 log 73741 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:16:59,894 logging 73741 8569921728 User created successfully: signup@email.com
+WARNING 2025-09-14 09:17:00,983 log 73741 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:17:09,554 logging 73741 8569921728 User created successfully: signup1@email.com
+WARNING 2025-09-14 09:17:20,885 log 74459 8569921728 Unauthorized: /api/v1/accounts/login/
+WARNING 2025-09-14 09:17:23,433 log 74459 8569921728 Unauthorized: /api/v1/accounts/login/
+WARNING 2025-09-14 09:17:24,611 log 74459 8569921728 Bad Request: /api/v1/accounts/sign-up/
+WARNING 2025-09-14 09:17:25,708 log 74459 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:17:26,988 logging 74459 8569921728 User created successfully: signup@email.com
+WARNING 2025-09-14 09:17:28,079 log 74459 8569921728 Bad Request: /api/v1/accounts/sign-up/
+INFO 2025-09-14 09:17:36,484 logging 74459 8569921728 User created successfully: signup1@email.com

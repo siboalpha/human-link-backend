@@ -1,16 +1,17 @@
 # authentication class
-from core.data_classes import ServiceResponse
+from core.utils.data_classes import ServiceResponse
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from users.models import UserProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
+from core.utils.logging import LoggingService
 
 
 class AuthenticationService:
     def __init__(self):
-        pass
+        self.logger = LoggingService()
 
     def signin(self, method, **kwargs) -> ServiceResponse:
         """
@@ -24,24 +25,32 @@ class AuthenticationService:
         Returns:
             ServiceResponse: A response object containing success status, message, data (tokens), and status code.
         """
-        if method == "password":
-            username = kwargs.get("username")
-            password = kwargs.get("password")
-            return self.signinWithPassword(username, password)
+        try:
+            if method == "password":
+                username = kwargs.get("username")
+                password = kwargs.get("password")
+                return self.signinWithPassword(username, password)
 
-        elif method == "google":
-            google_token = kwargs.get("google_token")
-            return self.signinWithGoogle(google_token)
+            elif method == "google":
+                google_token = kwargs.get("google_token")
+                return self.signinWithGoogle(google_token)
 
-        elif method == "facebook":
-            facebook_token = kwargs.get("facebook_token")
-            return self.signinWithFacebook(facebook_token)
+            elif method == "facebook":
+                facebook_token = kwargs.get("facebook_token")
+                return self.signinWithFacebook(facebook_token)
 
-        else:
+            else:
+                return ServiceResponse(
+                    success=False,
+                    message="Invalid signin method. Use 'password', 'google', or 'facebook'",
+                    status_code=400,
+                )
+        except Exception as e:
+            self.logger.log(f"Error during signin: {str(e)}", level="error", error=e)
             return ServiceResponse(
                 success=False,
-                message="Invalid signin method. Use 'password', 'google', or 'facebook'",
-                status_code=400,
+                message="An error occurred during signin",
+                status_code=500,
             )
 
     def signinWithPassword(self, username, password) -> ServiceResponse:
@@ -60,37 +69,49 @@ class AuthenticationService:
         Returns:
             ServiceResponse: A response object containing success status, message, data (tokens), and status code.
         """
-        # Validate the username and password
-        user = authenticate(username=username, password=password)
-        if user is None:
+        try:
+            # Validate the username and password
+            user = authenticate(username=username, password=password)
+            if user is None:
+                return ServiceResponse(
+                    success=False,
+                    message="Invalid username or password",
+                    status_code=401,
+                )
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+
+            # Add custom claims to the token
+            refresh["email"] = user.email
+            refresh["user_id"] = user.id
+            refresh["role"] = getattr(user, "role", "user")
+
+            # Get profile ID if user has a profile
+            if hasattr(user, "userprofile"):
+                refresh["profile_id"] = user.userprofile.id
+
+            # Prepare response data with only tokens
+            response_data = {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }
+
             return ServiceResponse(
-                success=False, message="Invalid username or password", status_code=401
+                success=True,
+                message="signin successful",
+                data=response_data,
+                status_code=200,
             )
-
-        # Generate JWT tokens
-        refresh = RefreshToken.for_user(user)
-
-        # Add custom claims to the token
-        refresh["email"] = user.email
-        refresh["user_id"] = user.id
-        refresh["role"] = getattr(user, "role", "user")
-
-        # Get profile ID if user has a profile
-        if hasattr(user, "userprofile"):
-            refresh["profile_id"] = user.userprofile.id
-
-        # Prepare response data with only tokens
-        response_data = {
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        }
-
-        return ServiceResponse(
-            success=True,
-            message="signin successful",
-            data=response_data,
-            status_code=200,
-        )
+        except Exception as e:
+            self.logger.log(
+                f"Error during password signin: {str(e)}", level="error", error=e
+            )
+            return ServiceResponse(
+                success=False,
+                message="An error occurred during signin",
+                status_code=500,
+            )
 
     def signinWithGoogle(self, google_token) -> ServiceResponse:
         # Implement Google signin logic here
@@ -176,29 +197,39 @@ class AuthenticationService:
         Returns:
             ServiceResponse: A response object containing success status, message, data (user info), and status code.
         """
-        if method == "password":
-            email = kwargs.get("email")
-            password = kwargs.get("password")
-            extra_fields = {
-                k: v for k, v in kwargs.items() if k not in ["email", "password"]
-            }
-            return self.signupWithPassword(email, password, **extra_fields)
+        try:
+            if method == "password":
+                email = kwargs.get("email")
+                password = kwargs.get("password")
+                extra_fields = {
+                    k: v for k, v in kwargs.items() if k not in ["email", "password"]
+                }
+                return self.signupWithPassword(email, password, **extra_fields)
 
-        elif method == "google":
-            google_token = kwargs.get("google_token")
-            extra_fields = {k: v for k, v in kwargs.items() if k != "google_token"}
-            return self.signupWithGoogle(google_token, **extra_fields)
+            elif method == "google":
+                google_token = kwargs.get("google_token")
+                extra_fields = {k: v for k, v in kwargs.items() if k != "google_token"}
+                return self.signupWithGoogle(google_token, **extra_fields)
 
-        elif method == "facebook":
-            facebook_token = kwargs.get("facebook_token")
-            extra_fields = {k: v for k, v in kwargs.items() if k != "facebook_token"}
-            return self.signupWithFacebook(facebook_token, **extra_fields)
+            elif method == "facebook":
+                facebook_token = kwargs.get("facebook_token")
+                extra_fields = {
+                    k: v for k, v in kwargs.items() if k != "facebook_token"
+                }
+                return self.signupWithFacebook(facebook_token, **extra_fields)
 
-        else:
+            else:
+                return ServiceResponse(
+                    success=False,
+                    message="Invalid signup method. Use 'password', 'google', or 'facebook'",
+                    status_code=400,
+                )
+        except Exception as e:
+            self.logger.log(f"Error during signup: {str(e)}", level="error", error=e)
             return ServiceResponse(
                 success=False,
-                message="Invalid signup method. Use 'password', 'google', or 'facebook'",
-                status_code=400,
+                message="An error occurred during signup",
+                status_code=500,
             )
 
     def signupWithPassword(self, email, password, **extra_fields) -> ServiceResponse:
@@ -258,6 +289,8 @@ class AuthenticationService:
                 "access": str(refresh.access_token),
             }
 
+            self.logger.log(f"User created successfully: {email}", level="info")
+
             return ServiceResponse(
                 success=True,
                 message="User created successfully",
@@ -266,8 +299,11 @@ class AuthenticationService:
             )
 
         except Exception as e:
+            self.logger.log(f"Error creating user: {str(e)}", level="error", error=e)
             return ServiceResponse(
-                success=False, message=f"Error creating user: {str(e)}", status_code=500
+                success=False,
+                message="An error occurred while creating the user",
+                status_code=500,
             )
 
     def signupWithGoogle(self, google_token, **extra_fields) -> ServiceResponse:
