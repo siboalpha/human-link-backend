@@ -1,28 +1,27 @@
-# email api doc
-# curl "https://api.postmarkapp.com/email" \
-#   -X POST \
-#   -H "Accept: application/json" \
-#   -H "Content-Type: application/json" \
-#   -H "X-Postmark-Server-Token: cbf08161-8ef0-4aab-86ee-c82951780e1a" \
-#   -d '{
-#         "From": "alphonse@pixelsprint.tech",
-#         "To": "alphonse@pixelsprint.tech",
-#         "Subject": "Hello from Postmark",
-#         "HtmlBody": "<strong>Hello</strong> dear Postmark user.",
-#         "MessageStream": "outbound"
-#       }'
-
 from django.conf import settings
 import requests
 
 
 class EmailClient:
     def __init__(self):
-        self.api_key = settings.POSTMARK_API_KEY
-        self.sender_email = settings.POSTMARK_SENDER_EMAIL
+        self.api_key = getattr(settings, "POSTMARK_API_KEY", "")
+        self.sender_email = getattr(settings, "POSTMARK_SENDER_EMAIL", "")
         self.api_url = "https://api.postmarkapp.com/email"
 
+        # Check if configuration is available
+        if not self.api_key or not self.sender_email:
+            print(f"⚠️  Email configuration missing:")
+            if not self.api_key:
+                print("   - POSTMARK_API_KEY not set")
+            if not self.sender_email:
+                print("   - POSTMARK_SENDER_EMAIL not set")
+
     def send_email(self, to: str, subject: str, html_content: str) -> bool:
+        # Check if we have the required configuration
+        if not self.api_key or not self.sender_email:
+            print(f"❌ Cannot send email - missing configuration")
+            return False
+
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -38,8 +37,12 @@ class EmailClient:
 
         try:
             response = requests.post(self.api_url, json=payload, headers=headers)
+            if response.status_code == 422:
+                print(f"❌ Postmark API error (422): {response.text}")
+                return False
             response.raise_for_status()
+            print(f"✅ Email sent successfully to {to}")
             return True
         except requests.RequestException as e:
-            # Log the error (omitted for brevity)
+            print(f"❌ Failed to send email: {str(e)}")
             return False

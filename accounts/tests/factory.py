@@ -1,0 +1,3 @@
+from users.models import UserProfile, UserPreferences
+
+# ...existing code...

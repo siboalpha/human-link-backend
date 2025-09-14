@@ -12,6 +12,108 @@ Roles include Normal Users, Friends, Managers, and Admins.
 
 ---
 
+## Application Architecture Pattern
+
+### Layer Structure
+Our Django application follows a clean architecture pattern with clear separation of concerns:
+
+```
+API Layer (Views) → Service Layer → Repository Layer → Data Layer (Models)
+```
+
+### 1. **Repository Layer**
+- **Purpose**: Handle all database operations and queries
+- **Location**: `{app}/repositories/`
+- **Responsibility**: 
+  - Database queries and operations
+  - Data validation at DB level
+  - Return raw objects or querysets
+- **Return Type**: `RepositoryResponse` with objects/querysets
+- **Example Structure**:
+  ```python
+  # users/repositories/questionnaire_repository.py
+  class QuestionnaireRepository:
+      def create_questionnaire(self, profile, data) -> RepositoryResponse:
+          # Database operations
+          return RepositoryResponse(success=True, data=questionnaire_obj)
+  ```
+
+### 2. **Service Layer**  
+- **Purpose**: Handle business logic and orchestration
+- **Location**: `{app}/services/`
+- **Types**:
+  - **Operations**: CRUD operations (`questionnaire_operations.py`)
+  - **Query**: Complex queries and filtering (`questionnaire_query.py`) 
+  - **Utils**: App-specific utilities (`questionnaire_utils.py`)
+- **Responsibility**:
+  - Business logic validation
+  - Data transformation and serialization
+  - Orchestrating multiple repositories
+  - Email sending, token generation, etc.
+- **Return Type**: `ServiceResponse` with serialized data
+- **Example Structure**:
+  ```python
+  # users/services/questionnaire_operations.py
+  class QuestionnaireOperations:
+      def __init__(self):
+          self.repository = QuestionnaireRepository()
+      
+      def create_questionnaire(self, user, data) -> ServiceResponse:
+          # Business logic
+          # Call repository
+          # Return serialized data
+  ```
+
+### 3. **API Layer (Views)**
+- **Purpose**: Handle HTTP requests and responses
+- **Location**: `{app}/views.py`
+- **Responsibility**:
+  - Request validation
+  - Authentication/authorization
+  - Call appropriate services
+  - Return REST framework Response
+- **Return Type**: `rest_framework.Response`
+- **Example**:
+  ```python
+  @api_view(['POST'])
+  @permission_classes([IsAuthenticated])
+  def create_questionnaire_view(request):
+      service = QuestionnaireOperations()
+      response = service.create_questionnaire(request.user, request.data)
+      return Response(response.data, status=response.status_code)
+  ```
+
+### 4. **Data Classes**
+- **ServiceResponse**: Used by services to return serialized data
+  ```python
+  @dataclass
+  class ServiceResponse:
+      success: bool
+      message: str
+      data: Optional[dict] = field(default_factory=dict)
+      status_code: int = 400
+  ```
+
+- **RepositoryResponse**: Used by repositories to return objects/queries
+  ```python
+  @dataclass
+  class RepositoryResponse:
+      success: bool
+      message: str
+      data: Any = None
+      error: Optional[str] = None
+  ```
+
+### 5. **Testing Structure**
+- **Location**: `{app}/tests/`
+- **Structure**:
+  - `repositories/` - Test repository layer
+  - `services/` - Test service layer  
+  - `endpoints/` - Test API endpoints
+  - `factory.py` - Test data factories
+
+---
+
 ## Technology Stack
 
 - **Backend**: Python Django (REST API, user/friend management, matching logic)  
@@ -36,14 +138,14 @@ Roles include Normal Users, Friends, Managers, and Admins.
 ### 1. Client Layer  
 
 #### Next.js Web App (TypeScript)
-- Landing page: “Unlimited Connections” and “Start 7-Day Free Trial” CTA  
+- Landing page: "Unlimited Connections" and "Start 7-Day Free Trial" CTA  
 - User dashboard: Profile, match list, session scheduler, feedback form  
 - Friend dashboard: Session calendar, user messages, payout tracking  
 - Manager/Admin portals: Ticket management, performance analytics  
 
 #### Flutter Mobile App
 - Cross-platform iOS/Android with the same features as web (sign-up, chats, feedback)  
-- Push notifications (Firebase): “New friend match!” or renewal reminders  
+- Push notifications (Firebase): "New friend match!" or renewal reminders  
 
 #### SEO
 - Server-side rendering (Next.js) for organic discovery and link sharing  

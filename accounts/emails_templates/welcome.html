@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        p {
+            margin-top: 12px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .higlight {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            width: 100%;
+            text-align: start;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .email-body {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+
+        .email-footer {
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            width: fit-content;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="email-body">
+            <h2>Hi {{first_name}},</h2>
+            <p>Welcome to Human Link! We're excited to have you on board.</p>
+            <p>To get started, please verify your email address by clicking the link below:</p>
+            <a href="{{verification_link}}" class="button">Click here to verify</a>
+            <p>Or copy and paste the following link into your browser:</p>
+            <p class="higlight"><a href="{{verification_link}}">{{verification_link}}</a></p>
+            <p>If you did not sign up for this account, please ignore this email.</p>
+            <p>Best regards,<br>The Human Link Team</p>
+        </div>
+
+        <div class="email-footer">
+            <p>&copy; 2024 Human Link. All rights reserved.</p>
+            <p>1234 Street Rd, Suite 1234, City, State, 12345</p>
+
+            <div class="links">
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -121,3 +121,95 @@ WARNING 2025-09-14 09:17:25,708 log 74459 8569921728 Bad Request: /api/v1/accoun
 INFO 2025-09-14 09:17:26,988 logging 74459 8569921728 User created successfully: signup@email.com
 WARNING 2025-09-14 09:17:28,079 log 74459 8569921728 Bad Request: /api/v1/accounts/sign-up/
 INFO 2025-09-14 09:17:36,484 logging 74459 8569921728 User created successfully: signup1@email.com
+INFO 2025-09-14 12:06:14,839 autoreload 36671 8569921728 Watching for file changes with StatReloader
+WARNING 2025-09-14 12:08:27,433 log 36671 6198423552 Not Found: /v1/accounts/sign-up/
+WARNING 2025-09-14 12:08:27,434 basehttp 36671 6198423552 "POST /v1/accounts/sign-up/ HTTP/1.1" 404 2393
+INFO 2025-09-14 12:09:24,467 logging 36671 6198423552 User created successfully: sibo.alponsee@gmail.com
+INFO 2025-09-14 12:09:24,468 basehttp 36671 6198423552 "POST /api/v1/accounts/sign-up/ HTTP/1.1" 201 744
+WARNING 2025-09-14 12:10:24,706 log 36671 6215823360 Bad Request: /api/v1/accounts/login/
+WARNING 2025-09-14 12:10:24,707 basehttp 36671 6215823360 "POST /api/v1/accounts/login/ HTTP/1.1" 400 34
+INFO 2025-09-14 12:10:36,712 basehttp 36671 6215823360 "POST /api/v1/accounts/login/ HTTP/1.1" 200 651
+INFO 2025-09-14 12:11:38,099 logging 36671 6232649728 User created successfully: sibo.alphonsee@gmail.com
+INFO 2025-09-14 12:11:38,100 basehttp 36671 6232649728 "POST /api/v1/accounts/sign-up/ HTTP/1.1" 201 746
+INFO 2025-09-14 12:11:58,019 basehttp 36671 6232649728 "POST /api/v1/accounts/login/ HTTP/1.1" 200 654
+INFO 2025-09-14 12:15:18,726 logging 36671 6249476096 Email verified successfully for user sibo.alphonsee@gmail.com
+INFO 2025-09-14 12:15:18,727 basehttp 36671 6249476096 "POST /api/v1/accounts/verify-email/ HTTP/1.1" 200 41
+INFO 2025-09-14 12:24:53,428 autoreload 36671 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 12:24:53,865 autoreload 53909 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:28:56,369 autoreload 53909 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/core/urls.py changed, reloading.
+INFO 2025-09-14 12:28:56,704 autoreload 58125 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:30:41,211 autoreload 58125 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/admin.py changed, reloading.
+INFO 2025-09-14 12:30:41,502 autoreload 59923 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:31:27,487 autoreload 59923 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/serializers.py changed, reloading.
+INFO 2025-09-14 12:31:27,958 autoreload 60932 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:51:01,820 autoreload 60932 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 12:51:02,153 autoreload 79093 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:52:14,168 autoreload 79093 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 12:52:14,461 autoreload 80196 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:54:02,120 autoreload 80196 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/migrations/0001_initial.py changed, reloading.
+INFO 2025-09-14 12:54:02,332 autoreload 82816 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:57:31,257 autoreload 82816 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/serializers.py changed, reloading.
+INFO 2025-09-14 12:57:31,583 autoreload 86406 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:57:59,276 autoreload 86406 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/views.py changed, reloading.
+INFO 2025-09-14 12:57:59,938 autoreload 86845 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:58:15,409 autoreload 86845 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/urls.py changed, reloading.
+INFO 2025-09-14 12:58:15,686 autoreload 87126 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 12:58:31,098 autoreload 87126 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/urls.py changed, reloading.
+INFO 2025-09-14 12:58:31,399 autoreload 87369 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 13:01:17,058 logging 90418 8569921728 Questionnaire created for user testuser
+INFO 2025-09-14 13:01:17,263 logging 90418 8569921728 Questionnaire created for user testuser
+INFO 2025-09-14 13:01:17,641 logging 90418 8569921728 Questionnaire created for user testuser
+INFO 2025-09-14 13:01:45,885 autoreload 87369 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/serializers.py changed, reloading.
+INFO 2025-09-14 13:01:46,211 autoreload 90948 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 13:09:22,036 logging 98084 8569921728 Questionnaire created for user steven15
+INFO 2025-09-14 13:09:25,492 logging 98084 8569921728 Questionnaire deleted for user campbellstephen
+INFO 2025-09-14 13:09:36,084 logging 98084 8569921728 Questionnaire created for user cwashington
+INFO 2025-09-14 13:09:37,183 logging 98084 8569921728 Questionnaire updated for user antonio70
+INFO 2025-09-14 13:09:38,295 logging 98084 8569921728 Questionnaire updated for user joan07
+INFO 2025-09-14 13:09:39,397 logging 98084 8569921728 Questionnaire updated for user snowrachel
+INFO 2025-09-14 13:09:50,514 logging 98084 8569921728 Questionnaire created for user ann63
+INFO 2025-09-14 13:09:51,621 logging 98084 8569921728 Questionnaire section 'demographics' updated for user carla39
+INFO 2025-09-14 13:09:54,956 logging 98084 8569921728 Questionnaire section 'demographics' updated for user luke26
+INFO 2025-09-14 13:11:16,570 logging 547 8569921728 Questionnaire created for user teresa61
+INFO 2025-09-14 13:11:20,246 logging 547 8569921728 Questionnaire deleted for user jorgebrown
+INFO 2025-09-14 13:11:30,854 logging 547 8569921728 Questionnaire created for user wfarrell
+INFO 2025-09-14 13:11:33,218 logging 547 8569921728 Questionnaire updated for user margaret86
+INFO 2025-09-14 13:11:34,349 logging 547 8569921728 Questionnaire updated for user brandiweber
+INFO 2025-09-14 13:11:45,478 logging 547 8569921728 Questionnaire created for user vegabenjamin
+INFO 2025-09-14 13:11:46,604 logging 547 8569921728 Questionnaire section 'demographics' updated for user brittany47
+INFO 2025-09-14 13:11:49,964 logging 547 8569921728 Questionnaire section 'demographics' updated for user brian20
+WARNING 2025-09-14 13:57:30,029 log 43315 8569921728 Not Found: /api/v1/users/questionnaire/
+INFO 2025-09-14 13:57:31,141 logging 43315 8569921728 Questionnaire deleted for user vanessacastro
+WARNING 2025-09-14 13:57:32,262 log 43315 8569921728 Not Found: /api/v1/users/questionnaire/
+WARNING 2025-09-14 13:57:34,477 log 43315 8569921728 Unauthorized: /api/v1/users/questionnaire/
+INFO 2025-09-14 13:57:35,592 logging 43315 8569921728 Questionnaire updated for user latoyaholmes
+WARNING 2025-09-14 13:57:36,696 log 43315 8569921728 Bad Request: /api/v1/users/questionnaire/
+WARNING 2025-09-14 13:57:37,813 log 43315 8569921728 Bad Request: /api/v1/users/questionnaire/
+INFO 2025-09-14 13:57:38,924 logging 43315 8569921728 Questionnaire created for user ann53
+INFO 2025-09-14 13:57:40,040 logging 43315 8569921728 Questionnaire updated for user heatherspears
+INFO 2025-09-14 13:57:41,170 logging 43315 8569921728 Questionnaire created for user charlesmartin
+WARNING 2025-09-14 13:57:42,287 log 43315 8569921728 Bad Request: /api/v1/users/questionnaire/section/invalid_section/
+INFO 2025-09-14 13:57:43,409 logging 43315 8569921728 Questionnaire section 'demographics' updated for user karen30
+WARNING 2025-09-14 13:57:44,530 log 43315 8569921728 Unauthorized: /api/v1/users/questionnaire/section/demographics/
+WARNING 2025-09-14 13:57:50,162 log 43315 8569921728 Unauthorized: /api/v1/users/questionnaire/status/
+WARNING 2025-09-14 13:57:52,436 log 43315 8569921728 Bad Request: /api/v1/users/questionnaire/validate/
+INFO 2025-09-14 14:04:30,560 autoreload 90948 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/urls.py changed, reloading.
+INFO 2025-09-14 14:04:30,954 autoreload 50017 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:04:53,529 autoreload 50017 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/views.py changed, reloading.
+INFO 2025-09-14 14:04:53,838 autoreload 50384 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:10:57,432 autoreload 50384 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/views.py changed, reloading.
+INFO 2025-09-14 14:10:58,011 autoreload 57214 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:19:54,104 autoreload 57214 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/admin.py changed, reloading.
+INFO 2025-09-14 14:19:54,466 autoreload 66779 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:28:12,615 autoreload 66779 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 14:28:13,055 autoreload 74405 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:29:57,337 autoreload 74405 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 14:29:57,877 autoreload 76024 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:32:01,462 autoreload 76024 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 14:32:01,808 autoreload 77966 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:32:02,916 autoreload 77966 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/models.py changed, reloading.
+INFO 2025-09-14 14:32:03,105 autoreload 77999 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:32:24,526 autoreload 77999 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/repositories/__init__.py changed, reloading.
+INFO 2025-09-14 14:32:24,826 autoreload 78345 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 14:32:31,080 autoreload 78345 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/repositories/__init__.py changed, reloading.
+INFO 2025-09-14 14:32:31,385 autoreload 78472 8569921728 Watching for file changes with StatReloader

@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,6 +25,14 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 # Sentry configuration for production error tracking
 SENTRY_DSN = os.getenv("SENTRY_DSN", None)
+
+# postmark configuration
+POSTMARK_API_KEY = os.getenv("POSTMARK_API_KEY", "")
+POSTMARK_SENDER_EMAIL = os.getenv("POSTMARK_SENDER_EMAIL", "")
+
+# Frontend URL for email links
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -199,7 +211,7 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "DEBUG" if ENVIRONMENT == "development" else "INFO",
+        "level": "WARNING",  # Changed from DEBUG to WARNING to reduce noise
     },
     "loggers": {
         "django": {
@@ -214,6 +226,24 @@ LOGGING = {
                 ["console", "file"] if ENVIRONMENT == "development" else ["console"]
             ),
             "level": "DEBUG" if ENVIRONMENT == "development" else "INFO",
+            "propagate": False,
+        },
+        # Silence Factory Boy's verbose DEBUG logging
+        "factory": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        # Silence faker's verbose DEBUG logging
+        "faker": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        # Silence urllib3 connection pool logging
+        "urllib3.connectionpool": {
+            "handlers": ["console"],
+            "level": "WARNING",
             "propagate": False,
         },
     },

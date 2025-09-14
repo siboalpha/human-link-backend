@@ -7,11 +7,17 @@ from users.models import UserProfile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from core.utils.logging import LoggingService
+from accounts.utils.generate_token import TokenGenerator
+from accounts.utils.emails import AccountEmails
+from django.utils import timezone
+from django.conf import settings
 
 
 class AuthenticationService:
     def __init__(self):
         self.logger = LoggingService()
+        self.token_generator = TokenGenerator()
+        self.email_service = AccountEmails()
 
     def signin(self, method, **kwargs) -> ServiceResponse:
         """
@@ -158,7 +164,6 @@ class AuthenticationService:
         """
 
     def resetPassword(self, email) -> ServiceResponse:
-        # Implement password reset logic here
         """
         Args:
             email (str): The email of the user requesting a password reset.
@@ -169,6 +174,126 @@ class AuthenticationService:
         Returns:
             ServiceResponse: A response object containing success status, message, and status code.
         """
+        try:
+            # Check if user exists
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                # Don't reveal if email exists for security
+                return ServiceResponse(
+                    success=True,
+                    message="If this email exists, a password reset link has been sent",
+                    status_code=200,
+                )
+
+            # Generate password reset token
+            reset_token = self.token_generator.generate_password_reset_token(user.id)
+
+            # Create reset link (you'll need to adjust the frontend URL)
+            reset_link = f"{settings.FRONTEND_URL}/reset-password?token={reset_token}"
+
+            # Send password reset email
+            first_name = user.first_name or "User"
+            email_sent = self.email_service.send_password_reset_email(
+                to_email=user.email, first_name=first_name, reset_link=reset_link
+            )
+
+            if not email_sent:
+                self.logger.log(
+                    f"Failed to send password reset email to {email}", level="error"
+                )
+                return ServiceResponse(
+                    success=False,
+                    message="Failed to send password reset email",
+                    status_code=500,
+                )
+
+            self.logger.log(f"Password reset email sent to {email}", level="info")
+            return ServiceResponse(
+                success=True,
+                message="If this email exists, a password reset link has been sent",
+                status_code=200,
+            )
+
+        except Exception as e:
+            self.logger.log(
+                f"Error during password reset for {email}: {str(e)}",
+                level="error",
+                error=e,
+            )
+            return ServiceResponse(
+                success=False,
+                message="An error occurred during password reset",
+                status_code=500,
+            )
+
+    def confirmPasswordReset(self, token: str, new_password: str) -> ServiceResponse:
+        """
+        Confirm password reset with token and set new password.
+
+        Args:
+            token (str): The password reset token.
+            new_password (str): The new password to set.
+
+        Returns:
+            ServiceResponse: A response object containing success status, message, and status code.
+        """
+        try:
+            # Verify the token
+            payload = self.token_generator.verify_token(token, "password_reset")
+
+            if "error" in payload:
+                return ServiceResponse(
+                    success=False,
+                    message=payload["error"],
+                    status_code=400,
+                )
+
+            # Get user
+            user_id = payload.get("user_id")
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return ServiceResponse(
+                    success=False,
+                    message="Invalid token",
+                    status_code=400,
+                )
+
+            # Validate new password
+            try:
+                validate_password(new_password, user)
+            except ValidationError as e:
+                return ServiceResponse(
+                    success=False,
+                    message=str(e),
+                    status_code=400,
+                )
+
+            # Set new password
+            user.set_password(new_password)
+            user.save()
+
+            self.logger.log(
+                f"Password reset completed for user {user.email}", level="info"
+            )
+            return ServiceResponse(
+                success=True,
+                message="Password reset successfully",
+                status_code=200,
+            )
+
+        except Exception as e:
+            self.logger.log(
+                f"Error during password reset confirmation: {str(e)}",
+                level="error",
+                error=e,
+            )
+            return ServiceResponse(
+                success=False,
+                message="An error occurred during password reset",
+                status_code=500,
+            )
 
     def changePassword(self, user, old_password, new_password) -> ServiceResponse:
         # Implement password change logic here
@@ -243,7 +368,8 @@ class AuthenticationService:
             2. Check if the email already exists in the database.
             3. Create a new user with the provided email, password, and extra fields.
             4. Create a user profile for the new user.
-            5. Generate JWT tokens with embedded claims.
+            5. Generate and send email verification token.
+            6. Generate JWT tokens with embedded claims.
         Returns:
             ServiceResponse: A response object containing success status, message, data (tokens), and status code.
         """
@@ -274,6 +400,33 @@ class AuthenticationService:
             # Create user profile
             profile = UserProfile.objects.create(user=user)
 
+            # Generate email verification token
+            verification_token = self.token_generator.generate_email_verification_token(
+                user.id
+            )
+
+            # Save verification token to profile
+            profile.email_verification_token = verification_token
+            profile.email_verification_sent_at = timezone.now()
+            profile.save()
+
+            # Send verification email
+            verification_link = (
+                f"{settings.FRONTEND_URL}/verify-email?token={verification_token}"
+            )
+            first_name = user.first_name or "User"
+
+            email_sent = self.email_service.send_email_verification(
+                to_email=user.email,
+                first_name=first_name,
+                verification_link=verification_link,
+            )
+
+            if not email_sent:
+                self.logger.log(
+                    f"Failed to send verification email to {email}", level="warning"
+                )
+
             # Generate JWT tokens
             refresh = RefreshToken.for_user(user)
 
@@ -282,18 +435,20 @@ class AuthenticationService:
             refresh["user_id"] = user.id
             refresh["role"] = getattr(user, "role", "user")
             refresh["profile_id"] = profile.id
+            refresh["email_verified"] = profile.email_verified
 
             # Prepare response data with only tokens
             response_data = {
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
+                "email_verification_sent": email_sent,
             }
 
             self.logger.log(f"User created successfully: {email}", level="info")
 
             return ServiceResponse(
                 success=True,
-                message="User created successfully",
+                message="User created successfully. Please check your email to verify your account.",
                 data=response_data,
                 status_code=201,
             )
@@ -336,28 +491,134 @@ class AuthenticationService:
             ServiceResponse: A response object containing success status, message, data (user info), and status code.
         """
 
-    def verifyEmail(self, user, verification_code) -> ServiceResponse:
-        # Implement email verification logic here
+    def verifyEmail(self, token: str) -> ServiceResponse:
         """
         Args:
-            user (User): The user to verify.
-            verification_code (str): The verification code sent to the user's email.
+            token (str): The email verification token.
         Business logic:
-            1. Check if the verification code matches the one stored for the user.
-            2. If it matches, mark the user's email as verified in the database.
+            1. Decode and validate the verification token.
+            2. Check if the token matches the one stored for the user.
+            3. If it matches, mark the user's email as verified in the database.
         Returns:
             ServiceResponse: A response object containing success status, message, and status code.
         """
+        try:
+            # Verify the token
+            payload = self.token_generator.verify_token(token, "email_verification")
+
+            if "error" in payload:
+                return ServiceResponse(
+                    success=False,
+                    message=payload["error"],
+                    status_code=400,
+                )
+
+            # Get user
+            user_id = payload.get("user_id")
+            try:
+                user = User.objects.get(id=user_id)
+                profile = user.userprofile
+            except (User.DoesNotExist, UserProfile.DoesNotExist):
+                return ServiceResponse(
+                    success=False,
+                    message="Invalid verification token",
+                    status_code=400,
+                )
+
+            # Check if email is already verified
+            if profile.email_verified:
+                return ServiceResponse(
+                    success=True,
+                    message="Email already verified",
+                    status_code=200,
+                )
+
+            # Verify the stored token matches
+            if profile.email_verification_token != token:
+                return ServiceResponse(
+                    success=False,
+                    message="Invalid verification token",
+                    status_code=400,
+                )
+
+            # Mark email as verified
+            profile.email_verified = True
+            profile.email_verification_token = None  # Clear the token
+            profile.save()
+
+            self.logger.log(
+                f"Email verified successfully for user {user.email}", level="info"
+            )
+            return ServiceResponse(
+                success=True,
+                message="Email verified successfully",
+                status_code=200,
+            )
+
+        except Exception as e:
+            self.logger.log(
+                f"Error during email verification: {str(e)}", level="error", error=e
+            )
+            return ServiceResponse(
+                success=False,
+                message="An error occurred during email verification",
+                status_code=500,
+            )
 
     def sendVerificationEmail(self, user) -> ServiceResponse:
-        # Implement sending verification email logic here
         """
         Args:
             user (User): The user to send the verification email to.
         Business logic:
-            1. Generate a verification code or link.
-            2. Send an email to the user's email address with the verification code/link.
+            1. Generate a verification token.
+            2. Send an email to the user's email address with the verification link.
         Returns:
             ServiceResponse: A response object containing success status, message, and status code.
         """
-        pass
+        try:
+            # Generate new verification token
+            verification_token = self.token_generator.generate_email_verification_token(
+                user.id
+            )
+
+            # Update profile with new token
+            profile = user.userprofile
+            profile.email_verification_token = verification_token
+            profile.email_verification_sent_at = timezone.now()
+            profile.save()
+
+            # Send verification email
+            verification_link = (
+                f"{settings.FRONTEND_URL}/verify-email?token={verification_token}"
+            )
+            first_name = user.first_name or "User"
+
+            email_sent = self.email_service.send_email_verification(
+                to_email=user.email,
+                first_name=first_name,
+                verification_link=verification_link,
+            )
+
+            if not email_sent:
+                return ServiceResponse(
+                    success=False,
+                    message="Failed to send verification email",
+                    status_code=500,
+                )
+
+            self.logger.log(f"Verification email sent to {user.email}", level="info")
+            return ServiceResponse(
+                success=True,
+                message="Verification email sent successfully",
+                status_code=200,
+            )
+
+        except Exception as e:
+            self.logger.log(
+                f"Error sending verification email: {str(e)}", level="error", error=e
+            )
+            return ServiceResponse(
+                success=False,
+                message="An error occurred while sending verification email",
+                status_code=500,
+            )
