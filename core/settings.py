@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv()
@@ -38,12 +39,14 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-woc6)6l2$$gz5rb4m8*t$#%xv2$knd)od*2o^afhcj8%o!t0&5"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "django-insecure-woc6)6l2$$gz5rb4m8*t$#%xv2$knd)od*2o^afhcj8%o!t0&5"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0").split(",")
 
 
 # Application definition
@@ -101,12 +104,19 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Use dj-database-url to parse DATABASE_URL environment variable
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {"default": dj_database_url.parse(DATABASE_URL)}
+else:
+    # Fallback to SQLite for local development without Docker
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
 
 
 # Password validation

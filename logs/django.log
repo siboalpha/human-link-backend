@@ -213,3 +213,4 @@ INFO 2025-09-14 14:32:24,526 autoreload 77999 8569921728 /Users/sibomanaalphonse
 INFO 2025-09-14 14:32:24,826 autoreload 78345 8569921728 Watching for file changes with StatReloader
 INFO 2025-09-14 14:32:31,080 autoreload 78345 8569921728 /Users/sibomanaalphonse/Desktop/projects/human-link/human-link-backend/users/repositories/__init__.py changed, reloading.
 INFO 2025-09-14 14:32:31,385 autoreload 78472 8569921728 Watching for file changes with StatReloader
+INFO 2025-09-14 16:32:38,845 autoreload 10592 8569921728 Watching for file changes with StatReloader
