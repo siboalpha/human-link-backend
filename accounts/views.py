@@ -40,3 +40,22 @@ def login_view(request):
     if not response.success:
         return Response({"message": response.message}, status=response.status_code)
     return Response(response.data, status=response.status_code)
+
+
+# signup view
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def signup_view(request):
+
+    data = request.data
+    method = data.get("method")
+    response = auth_service.signup(
+        method=method,
+        email=data.get("email"),
+        password=data.get("password"),
+        first_name=data.get("first_name"),
+        last_name=data.get("last_name"),
+    )
+    if not response.success:
+        return Response({"message": response.message}, status=response.status_code)
+    return Response(response.data, status=response.status_code)
